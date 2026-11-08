@@ -1,6 +1,17 @@
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  Show,
+  UserButton,
+} from "@clerk/nextjs";
+import { shadcn } from "@clerk/ui/themes";
+import { Suspense } from "react";
 import "./globals.css";
 import { DM_Sans, Lora } from "next/font/google";
-import {ThemeProvider} from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/Header"
 
 const lora = Lora({
   subsets: ["latin"],
@@ -24,16 +35,23 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${lora.variable} ${dmSans.variable} font-sans`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {/* Header */}
-          <main className="min-h-screen">{children}</main>
-          {/* Footer */}
-        </ThemeProvider>
+        <ClerkProvider appearance={{ theme: shadcn }}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main className="min-h-screen">
+              {/*Header */}
+              <Header/>
+
+              {children}
+
+              {/* Footer */}
+            </main>
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
