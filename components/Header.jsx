@@ -1,10 +1,10 @@
+"use client";
+
 import React from "react";
 import {
-  SignedIn,
-  SignedOut,
+  Show,
   SignInButton,
   UserButton,
-  SignOutButton,
   SignUpButton,
 } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
@@ -13,34 +13,41 @@ import Image from "next/image";
 
 const Header = () => {
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-10 py-3 border-b border-white/7 backdrop-blur-xl">
-      <Link href={"/"}>
+    <nav className="fixed inset-x-0 top-0 z-50 flex h-[68px] items-center justify-between border-b border-white/[0.07] bg-[#090a0b]/85 px-4 backdrop-blur-xl sm:px-8">
+      <Link href="/" className="flex items-center gap-3">
         <Image
-          src={"/logo.png"}
+          src="/logo.png"
           alt="Prept Logo"
           width={100}
           height={100}
-          className="h-11 w-auto"
+          className="h-9 w-auto"
         />
+        <span className="hidden border-l border-white/10 pl-3 text-xs text-white/40 sm:block">
+          Your next chapter starts here.
+        </span>
       </Link>
-      {/* Redirection Logic */}
-      {/* Sign in */}
       <div className="flex items-center gap-3">
-        <show when="signed-out">
-          {/* Links */}
-
-          {/* Credits */}
-
+        <Show when="signed-out">
           <SignInButton mode="modal">
-            <Button variant="ghost">Sign In</Button>
+            <Button variant="ghost" className="text-white/65 hover:text-white">
+              Sign in
+            </Button>
           </SignInButton>
           <SignUpButton mode="modal">
-            <Button variant="gold">Get Started</Button>
+            <Button variant="gold" className="rounded-full px-5">
+              Get started
+            </Button>
           </SignUpButton>
-        </show>
-        <show when="signed-in">
+        </Show>
+        <Show when="signed-in">
+          <Link
+            href="/"
+            className="hidden rounded-full px-3 py-2 text-xs font-medium text-amber-100/80 transition hover:bg-white/[0.06] sm:block"
+          >
+            Community
+          </Link>
           <UserButton />
-        </show>
+        </Show>
       </div>
     </nav>
   );
