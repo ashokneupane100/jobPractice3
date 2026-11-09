@@ -1,0 +1,38 @@
+{
+  "editor.quickSuggestions": {
+    "other": "on",
+    "comments": "on",
+    "strings": "on"
+  },
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.wordBasedSuggestions": "allDocuments",
+  "editor.inlineSuggest.enabled": true,
+  "editor.inlineSuggest.suppressSuggestions": false,
+  "editor.inlineSuggest.showToolbar": "always",
+  "editor.inlineSuggest.syntaxHighlightingEnabled": true,
+  "editor.tabCompletion": "on",
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.parameterHints.enabled": true,
+  "editor.suggest.preview": true,
+  "editor.suggest.showInlineDetails": true,
+  "editor.stickySuggest.enabled": true,
+  "editor.snippetSuggestions": "inline",
+  "javascript.suggest.enabled": true,
+  "typescript.suggest.enabled": true,
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
+  "javascript.suggest.completeFunctionCalls": true,
+  "typescript.suggest.completeFunctionCalls": true,
+  "codeium.enableConfig": {
+    "*": true
+  },
+  "codeium.disableSupercomplete": false,
+  "supermaven.enable": {
+    "*": true
+  },
+  "continue.enableTabAutocomplete": true,
+  "continue.enableQuickActions": true,
+  "continue.enableNextEdit": true,
+  "WillLuke.nextjs.addTypesOnSave": true,
+  "WillLuke.nextjs.hasPrompted": true
+}

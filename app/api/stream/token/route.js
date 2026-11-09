@@ -1,8 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { StreamClient } from "@stream-io/node-sdk";
 
-export const runtime = "nodejs";
-
 export async function GET() {
   const { userId } = await auth();
 

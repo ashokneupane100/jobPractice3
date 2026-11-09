@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { shadcn } from "@clerk/ui/themes";
+import { shadcn } from "@clerk/themes";
+import { Suspense } from "react";
 import "./globals.css";
 import { DM_Sans, Lora } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -28,19 +29,21 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${lora.variable} ${dmSans.variable} font-sans`}>
-        <ClerkProvider appearance={{ theme: shadcn }}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <main className="min-h-screen">
-              <Header />
-              {children}
-            </main>
-          </ThemeProvider>
-        </ClerkProvider>
+        <Suspense fallback={null}>
+          <ClerkProvider appearance={{ theme: shadcn }}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main className="min-h-screen">
+                <Header />
+                {children}
+              </main>
+            </ThemeProvider>
+          </ClerkProvider>
+        </Suspense>
       </body>
     </html>
   );

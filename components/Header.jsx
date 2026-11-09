@@ -2,7 +2,8 @@
 
 import React from "react";
 import {
-  Show,
+  SignedIn,
+  SignedOut,
   SignInButton,
   UserButton,
   SignUpButton,
@@ -27,7 +28,7 @@ const Header = () => {
         </span>
       </Link>
       <div className="flex items-center gap-3">
-        <Show when="signed-out">
+        <SignedOut>
           <SignInButton mode="modal">
             <Button variant="ghost" className="text-white/65 hover:text-white">
               Sign in
@@ -38,8 +39,8 @@ const Header = () => {
               Get started
             </Button>
           </SignUpButton>
-        </Show>
-        <Show when="signed-in">
+        </SignedOut>
+        <SignedIn>
           <Link
             href="/"
             className="hidden rounded-full px-3 py-2 text-xs font-medium text-amber-100/80 transition hover:bg-white/[0.06] sm:block"
@@ -47,7 +48,7 @@ const Header = () => {
             Community
           </Link>
           <UserButton />
-        </Show>
+        </SignedIn>
       </div>
     </nav>
   );
