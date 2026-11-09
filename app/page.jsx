@@ -1,10 +1,19 @@
-import { GrayTitle, GoldTitle, SectionLabel } from "@/components/reusables";
+import {
+  GrayTitle,
+  GoldTitle,
+  SectionLabel,
+  SectionHeading,
+} from "@/components/reusables";
 import { StarsBackgroundDemo } from "@/components/demo-components-backgrounds-stars";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { AVATARS } from "@/lib/data";
+import { AI_TAGS, AVATARS, LOGOS, ROLES } from "@/lib/data";
 import Image from "next/image";
+import CodeBlockDemo from "@/components/demo-components-animate-code";
+import BentoCard from "@/components/BentoCard";
+import { Bot, Check } from "lucide-react";
+import Pricing from "@/components/Pricing";
 
 export default function Home() {
   return (
@@ -65,7 +74,129 @@ export default function Home() {
             </p>
           </div>
         </div>
+        <div className="col-span-full lg:col-span-2 flex items-center justify-center lg:justify-start mt-12 lg:mt-0 lg:rotate-3">
+          <CodeBlockDemo
+            delay={0}
+            duration={9000}
+            writing={true}
+            cursor={true}
+            cadence="even"
+          />
+        </div>
       </section>
+      <section className="relative z-10 border-y border-white/10 py-14">
+        <p className="text-center text-xs font-medium text-stone-600 tracking-widest uppercase mb-8">
+          Interviewees landed roles at:
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-10 px-2 sm:px-6">
+          {LOGOS.map((l) => (
+            <Image
+              key={l.alt}
+              src={l.src}
+              alt={l.alt}
+              width={50}
+              height={50}
+              className="h-6 w-auto opacity-60 grayscale"
+            />
+          ))}
+        </div>
+      </section>
+      <section className="relative z-10 px-4 sm:px-8 py-20 sm:py-28">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 sm:mb-16">
+            <SectionLabel>Features</SectionLabel>
+            <SectionHeading
+              gray="Everything you need,"
+              gold="nothing you don't"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div className="md:col-span-7">
+              <BentoCard
+                icon={<Bot size={20} className="text-amber-400" />}
+                title={<GrayTitle>AI Question Generator</GrayTitle>}
+                desc="Interviewers get a live AI co-pilot generating role-specific questions on demand — system design, behavioural, and DSA — all tailored to the candidate's level."
+              >
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {AI_TAGS.map((t) => (
+                    <Badge
+                      key={t.label}
+                      variant={t.active ? "gold" : "outline"}
+                    >
+                      {t.label}
+                    </Badge>
+                  ))}
+                </div>
+              </BentoCard>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 pb-28 max-w-5xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <SectionLabel>Who it&apos; for ?</SectionLabel>
+          <SectionHeading gray="Built for both sides" gold="of the table" />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {ROLES.map((role) => (
+            <div
+              key={role.label}
+              className="relative bg-[#0f0f11] border border-white/10 hover:border-amber-400/20 rounded-2xl p-12 h-full transition duration-300 overflow-hidden"
+            >
+              <span className="inline-block text-xs font-semibold text-amber-400 tracking-widest uppercase border border-amber-400/20 bg-amber-400/10 rounded-full px-3 py-1.5 mb-5">
+                {role.label}
+              </span>
+              <h3 className="font-serif text-2xl tracking-tight mb-4">
+                {role.title}
+              </h3>
+              <p className="text-sm text-stone-400 leading-relaxed mb-8">
+                {role.desc}
+              </p>
+              <ul className="space-y-3">
+                {role.perks.map((p) => (
+                  <li
+                    key={p}
+                    className="flex items-start gap-3 text-sm text-stone-400"
+                  >
+                    <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-amber-400/10 text-amber-400">
+                      <Check className="size-3" strokeWidth={3} />
+                    </span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="relative z-10 pb-28 max-w-6xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <SectionLabel>Pricing</SectionLabel>
+          <SectionHeading
+            gray="Simple, transparent"
+            gold="credit-based plans"
+          />
+          <p className="text-stone-400 mt-3 text-sm">
+            Each credit = one session. Unused credits roll over.
+          </p>
+        </div>
+
+        <Pricing />
+      </section>
+
+      <section className="relative z-10 pb-28 max-w-5xl mx-auto px-6">
+
+      </section>
+
+
+
+      <footer className="border-t border-white/10 py-8 text-center text-sm text-stone-500">
+        Created with ❤️ by Ashok Neupane
+      </footer>
     </div>
   );
 }

@@ -23,16 +23,19 @@
   "typescript.suggest.autoImports": true,
   "javascript.suggest.completeFunctionCalls": true,
   "typescript.suggest.completeFunctionCalls": true,
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
   "codeium.enableConfig": {
     "*": true
   },
   "codeium.disableSupercomplete": false,
   "supermaven.enable": {
-    "*": true
+    "*": false
   },
-  "continue.enableTabAutocomplete": true,
+  "continue.enableTabAutocomplete": false,
   "continue.enableQuickActions": true,
-  "continue.enableNextEdit": true,
+  "continue.enableNextEdit": false,
   "WillLuke.nextjs.addTypesOnSave": true,
   "WillLuke.nextjs.hasPrompted": true
 }

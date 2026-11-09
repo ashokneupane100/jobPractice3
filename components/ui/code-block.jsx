@@ -6,6 +6,8 @@ import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
 import { CheckIcon, CopyIcon } from "lucide-react"
+import * as CodeBlockPrimitive from "@animate-ui/react/primitives/code-block"
+import { CopyButton, CopyButtonIcon } from "@animate-ui/react/primitives/buttons/copy"
 
 const codeBlockVariants = cva(
   "group/code-block relative flex w-full min-w-0 flex-col overflow-hidden rounded-lg text-sm has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/50 data-[size=sm]:text-xs",
@@ -94,46 +96,40 @@ function CodeBlockCopyButton({
   variant = "ghost",
   size = "icon-xs",
   className,
-  onClick,
+
   ...props
 }) {
   const [copied, setCopied] = React.useState(false)
 
-  React.useEffect(() => {
-    if (!copied) {
-      return
-    }
 
-    const timeout = setTimeout(() => setCopied(false), 2000)
-    return () => clearTimeout(timeout)
-  }, [copied])
 
   return (
     <>
-      <Button
+      <CopyButton
+        asChild
         data-slot="code-block-copy-button"
-        data-copied={copied || undefined}
-        variant={variant}
-        size={size}
-        aria-label={copied ? "Copied" : "Copy"}
-        className={cn(className)}
-        onClick={(event) => {
-          onClick?.(event)
-          navigator.clipboard
-            .writeText(value)
-            .then(() => setCopied(true))
-            .catch(() => {})
-        }}
-        {...props}
+        content={value}
+        delay={2000}
+        onCopiedChange={setCopied}
       >
-        {copied ? (
-          <CheckIcon
+        <Button
+  
+          data-copied={copied || undefined}
+          variant={variant}
+          size={size}
+          aria-label={copied ? "Copied" : "Copy"}
+          className={cn(className)}
+  
+          {...props}
+        >
+          <CopyButtonIcon
+            icon={<CopyIcon
+            />}
+            copiedIcon={<CheckIcon
+            />}
           />
-        ) : (
-          <CopyIcon
-          />
-        )}
-      </Button>
+        </Button>
+      </CopyButton>
       <span aria-live="polite" className="sr-only">
         {copied ? "Copied" : ""}
       </span>
@@ -151,7 +147,7 @@ function CodeBlockContent({
   ...props
 }) {
   return (
-    <pre
+    <CodeBlockPrimitive.Content
       data-slot="code-block-content"
       data-wrap={wrap || undefined}
       data-numbered={lineNumbers || undefined}
@@ -177,7 +173,7 @@ function CodeBlockContent({
               ))
           : children}
       </code>
-    </pre>
+    </CodeBlockPrimitive.Content>
   )
 }
 
