@@ -2,21 +2,37 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
 import { Suspense } from "react";
 import "./globals.css";
-import { DM_Sans, Lora } from "next/font/google";
+import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/Header";
 
-const lora = Lora({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  style: ["normal", "italic"],
+const lora = localFont({
+  src: [
+    {
+      path: "./fonts/lora-latin.woff2",
+      weight: "400 500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/lora-italic-latin.woff2",
+      weight: "400 500",
+      style: "italic",
+    },
+  ],
   variable: "--font-serif",
+  display: "swap",
 });
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
+const dmSans = localFont({
+  src: [
+    {
+      path: "./fonts/dm-sans-latin.woff2",
+      weight: "400 700",
+      style: "normal",
+    },
+  ],
   variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata = {
