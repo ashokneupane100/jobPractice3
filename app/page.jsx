@@ -13,7 +13,8 @@ import Image from "next/image";
 import CodeBlockDemo from "@/components/demo-components-animate-code";
 import BentoCard from "@/components/BentoCard";
 import { Bot, Check, GitGraphIcon, GuitarIcon } from "lucide-react";
-import Pricing from "@/components/Pricing";
+
+import { PricingTable } from "@clerk/nextjs";
 
 export default function Home() {
   return (
@@ -185,7 +186,21 @@ export default function Home() {
           </p>
         </div>
 
-        <Pricing />
+        <PricingTable
+          collapseFeatures={false}
+          appearance={{
+            variables: {
+              colorPrimary: "#fbbf24",
+              colorPrimaryForeground: "#0a0a0b",
+              colorBackground: "#0f0f11",
+              colorText: "#e7e5e4",
+              colorTextSecondary: "#a8a29e",
+              colorInputBackground: "#151517",
+              colorInputText: "#e7e5e4",
+              borderRadius: "1rem",
+            },
+          }}
+        />
       </section>
 
       <section className="relative z-10 pb-28 max-w-5xl mx-auto px-6">

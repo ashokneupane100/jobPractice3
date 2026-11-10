@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/Header";
+import Header from "@/components/header";
 
 const lora = localFont({
   src: [
