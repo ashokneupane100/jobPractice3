@@ -5,6 +5,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
+import {Toaster} from "sonner";
 
 const lora = localFont({
   src: [
@@ -57,6 +58,7 @@ export default function RootLayout({ children }) {
                 <Header />
                 {children}
               </main>
+              <Toaster richColors/>
             </ThemeProvider>
           </ClerkProvider>
         </Suspense>

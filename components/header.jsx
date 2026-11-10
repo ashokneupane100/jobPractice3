@@ -3,8 +3,9 @@ import { Button } from "./ui/button";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
+import RoleRedirect from "./RoleRedirect";
+import CreditButton from "./CreditButton";
 import { CalendarDays, Users } from "lucide-react";
-import CreditButton from "@/components/CreditButton";
 
 const Header = async () => {
   const user = await checkUser();
@@ -21,6 +22,8 @@ const Header = async () => {
         />
       </Link>
 
+      {user && <RoleRedirect role={user.role} />}
+
       <div className="flex items-center gap-3">
         <SignedOut>
           <SignInButton mode="modal">
@@ -32,12 +35,6 @@ const Header = async () => {
         </SignedOut>
 
         <SignedIn>
-          {user?.role === "UNASSIGNED" && (
-            <Button variant="gold" asChild>
-              <Link href="/onboarding">Complete Onboarding</Link>
-            </Button>
-          )}
-
           {user?.role === "INTERVIEWER" && (
             <Button variant="ghost" asChild>
               <Link href="/dashboard">Dashboard</Link>
@@ -60,26 +57,15 @@ const Header = async () => {
               </Button>
             </>
           )}
-              {/* Credits */}
-              <CreditButton 
 
-              role={user?.role==="INTERVIEWEE" ? "INTERVIEWEE" : "INTERVIEWER"}
-
-              credits={
-                (user?.role==="INTERVIEWER"
-                  ? user?.creditBalance
-                  :user?.credits
-                )?? 0
-              }
-
-
-
-
-              />
-              
-
-
-          
+          <CreditButton
+            role={user?.role === "INTERVIEWER" ? "INTERVIEWER" : "INTERVIEWEE"}
+            credits={
+              (user?.role === "INTERVIEWER"
+                ? user?.creditBalance
+                : user?.credits) ?? 0
+            }
+          />
 
           <UserButton />
         </SignedIn>
