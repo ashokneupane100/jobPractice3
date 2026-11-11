@@ -10,13 +10,15 @@
   "editor.inlineSuggest.suppressSuggestions": false,
   "editor.inlineSuggest.showToolbar": "always",
   "editor.inlineSuggest.syntaxHighlightingEnabled": true,
-  "editor.tabCompletion": "on",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabCompletion": "onlySnippets",
   "editor.acceptSuggestionOnEnter": "on",
   "editor.parameterHints.enabled": true,
   "editor.suggest.preview": true,
   "editor.suggest.showInlineDetails": true,
   "editor.stickySuggest.enabled": true,
-  "editor.snippetSuggestions": "inline",
+  "editor.snippetSuggestions": "top",
+  "editor.suggest.showSnippets": true,
   "javascript.suggest.enabled": true,
   "typescript.suggest.enabled": true,
   "javascript.suggest.autoImports": true,
@@ -26,16 +28,6 @@
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.includePackageJsonAutoImports": "auto",
-  "codeium.enableConfig": {
-    "*": true
-  },
-  "codeium.disableSupercomplete": false,
-  "supermaven.enable": {
-    "*": false
-  },
-  "continue.enableTabAutocomplete": false,
-  "continue.enableQuickActions": true,
-  "continue.enableNextEdit": false,
   "WillLuke.nextjs.addTypesOnSave": true,
   "WillLuke.nextjs.hasPrompted": true
 }
