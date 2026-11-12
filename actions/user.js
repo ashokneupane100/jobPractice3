@@ -9,7 +9,7 @@ export const getCurrentUser=async()=>{
     if(!user) return null;
 
 
-    return db.usr.findUnique({
+    return db.user.findUnique({
         where:{clerkUserId:user.id},
         select:{
             role:true,

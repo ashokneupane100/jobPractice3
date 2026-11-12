@@ -11,6 +11,7 @@
 import "dotenv/config";
 import crypto from "node:crypto";
 import { Pool } from "pg";
+import { StreamClient } from "@stream-io/node-sdk";
 
 const pool = new Pool({ connectionString: process.env.DIRECT_URL });
 
@@ -24,6 +25,63 @@ const at = (offsetDays, hour, minute = 0) => {
   d.setHours(hour, minute, 0, 0);
   return d;
 };
+
+// Creates a real call on Stream so the seeded "Join call" button works.
+// Falls back to a placeholder id when Stream is not configured or unreachable.
+async function createStreamCall(interviewee, interviewer, key) {
+  const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY;
+  const apiSecret = process.env.STREAM_API_SECRET;
+  const fallback = `demo_${key}_${interviewee.id.slice(0, 8)}`;
+
+  if (!apiKey || !apiSecret) {
+    console.warn("⚠️  Stream credentials missing — using placeholder call id");
+    return fallback;
+  }
+
+  const callId = `mock_${Date.now()}_${crypto.randomBytes(3).toString("hex")}`;
+
+  try {
+    const stream = new StreamClient(apiKey, apiSecret);
+
+    await stream.upsertUsers([
+      {
+        id: interviewee.clerkUserId,
+        name: interviewee.name ?? "Interviewee",
+        image: interviewee.imageUrl ?? undefined,
+        role: "user",
+      },
+      {
+        id: interviewer.clerkUserId,
+        name: interviewer.name ?? "Interviewer",
+        image: interviewer.imageUrl ?? undefined,
+        role: "user",
+      },
+    ]);
+
+    await stream.video.call("default", callId).getOrCreate({
+      data: {
+        created_by_id: interviewee.clerkUserId,
+        members: [
+          { user_id: interviewee.clerkUserId, role: "host" },
+          { user_id: interviewer.clerkUserId, role: "host" },
+        ],
+        settings_override: {
+          recording: { mode: "available", quality: "1080p" },
+          screensharing: { enabled: true },
+          transcription: { mode: "auto-on" },
+        },
+      },
+    });
+
+    console.log(`📹 Created Stream call ${callId}`);
+    return callId;
+  } catch (err) {
+    console.warn(
+      `⚠️  Could not create Stream call (${err.message}) — using placeholder id`
+    );
+    return fallback;
+  }
+}
 
 // ───────────────────────────────────────────────────────────
 // Demo bookings for the signed-in user (as interviewee)
@@ -184,7 +242,7 @@ async function main() {
     const bookingIds = {};
     for (const b of demoBookings) {
       const interviewer = await client.query(
-        `SELECT id FROM "User" WHERE "clerkUserId" = $1`,
+        `SELECT id, "clerkUserId", name, "imageUrl" FROM "User" WHERE "clerkUserId" = $1`,
         [b.interviewer]
       );
       if (!interviewer.rows[0]) {
@@ -201,6 +259,13 @@ async function main() {
           ? at(b.days < 0 ? b.days + 1 : b.days - 1, 14)
           : created;
 
+      // Upcoming sessions need a real Stream call, otherwise "Join call"
+      // opens a call that doesn't exist on Stream and never connects.
+      const streamCallId =
+        b.status === "SCHEDULED"
+          ? await createStreamCall(user, interviewer.rows[0], b.key)
+          : `demo_${b.key}_${user.id.slice(0, 8)}`;
+
       const res = await client.query(
         `INSERT INTO "Booking"
            (id, "intervieweeId", "interviewerId", "startTime", "endTime", status,
@@ -215,7 +280,7 @@ async function main() {
           end,
           b.status,
           b.credits,
-          `demo_${b.key}_${user.id.slice(0, 8)}`,
+          streamCallId,
           b.status === "COMPLETED"
             ? `https://recordings.prept.example/demo/${b.key}.mp4`
             : null,

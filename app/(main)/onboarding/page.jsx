@@ -29,7 +29,7 @@ export default function OnboardingPage() {
     if (data && !loading) {
       router.push(role === "INTERVIEWER" ? "/dashboard" : "/explore");
     }
-  }, [data, router]);
+  }, [data, loading, role, router]);
 
   const toggleCategory = (val) => {
     setForm((prev) => ({

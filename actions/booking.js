@@ -2,7 +2,7 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/prisma";
-import { StreamClient } from "@stream-io/node-sdk";
+import { getStreamClient, CALL_SETTINGS_OVERRIDE } from "@/lib/stream";
 import { revalidatePath } from "next/cache";
 import { request } from "@arcjet/next";
 import { createRateLimiter, checkRateLimit } from "@/lib/arcjet";
@@ -86,12 +86,14 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
     throw new Error("This slot was just booked. Please pick another.");
 
   // ── Create Stream call ─────────────────────────────────────────────────────
-  let streamCallId;
+  // Generate the id first so the booking can still be saved if Stream is
+  // unreachable; the call page re-provisions it via ensureCall() on join.
+  const streamCallId = `mock_${Date.now()}_${Math.random()
+    .toString(36)
+    .slice(2, 7)}`;
+
   try {
-    const streamClient = new StreamClient(
-      process.env.NEXT_PUBLIC_STREAM_API_KEY,
-      process.env.STREAM_SECRET_KEY
-    );
+    const streamClient = getStreamClient();
 
     await streamClient.upsertUsers([
       {
@@ -108,10 +110,6 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
       },
     ]);
 
-    streamCallId = `mock_${Date.now()}_${Math.random()
-      .toString(36)
-      .slice(2, 7)}`;
-
     const call = streamClient.video.call("default", streamCallId);
 
     await call.getOrCreate({
@@ -121,21 +119,16 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
           { user_id: dbUser.clerkUserId, role: "host" },
           { user_id: interviewer.clerkUserId, role: "host" },
         ],
-        settings_override: {
-          recording: { mode: "available", quality: "1080p" },
-          screensharing: {
-            enabled: true,
-            // target_resolution: { width: 1920, height: 1080 },
-          },
-          transcription: {
-            mode: "auto-on", // starts when first user joins, stops when all leave
-          },
-        },
+        settings_override: CALL_SETTINGS_OVERRIDE,
       },
     });
   } catch (err) {
-    console.error("Stream call creation failed:", err);
-    throw new Error("Failed to create video call. Please try again.");
+    // Non-fatal: don't block the booking. ensureCall() retries provisioning
+    // when either participant opens the call link.
+    console.error(
+      "Stream call creation failed (will retry on join):",
+      err?.message ?? err,
+    );
   }
 
   try {

@@ -7,11 +7,10 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   /* config options here */
   outputFileTracingRoot: projectRoot,
-  experimental: {
-    agentFeedback: true,
-  },
+  // NOTE: `experimental.agentFeedback` and `partialPrefetching` are not
+  // supported by Next 16.1.6 (build warns "Unrecognized key(s)"). Removed so
+  // production builds are clean. `cacheComponents` is the supported flag.
   cacheComponents: true,
-  partialPrefetching: true,
   images: {
     remotePatterns: [
       {

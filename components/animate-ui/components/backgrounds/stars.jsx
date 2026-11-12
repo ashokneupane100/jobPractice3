@@ -25,6 +25,8 @@ function StarLayer({
   const [boxShadow, setBoxShadow] = React.useState('');
 
   React.useEffect(() => {
+    // Generated randomly on the client only, so server HTML cannot mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBoxShadow(generateStars(count, starColor));
   }, [count, starColor]);
 
