@@ -8,7 +8,8 @@
     "start": "next start",
     "postinstall": "prisma generate",
     "lint": "eslint",
-    "seed": "node prisma/seed.mjs"
+    "seed": "node prisma/seed.mjs",
+    "seed:me": "node prisma/seed-appointments.mjs"
   },
   "dependencies": {
     "@animate-ui/react": "^2.4.2",
